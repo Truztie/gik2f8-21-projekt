@@ -3,16 +3,15 @@
 let bookList = [];
 
 window.addEventListener('load', () => {
-  getAll().then((apiBooks) => (bookList = apiBooks));
+  getAll().then((apiStarWars) => (bookList = apiStarWars));
 });
 
 searchField.addEventListener('keyup', (e) =>
   renderBookList(
-    bookList.filter(({ title, author }) => {
+    bookList.filter(({name}) => {
       const searchTerm = e.target.value.toLowerCase();
       return (
-        title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        author.toLowerCase().includes(searchTerm.toLowerCase())
+        name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     })
   )

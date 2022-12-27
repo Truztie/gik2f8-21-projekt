@@ -95,7 +95,7 @@ app.delete('/tasks/:id', async (req, res) => {
       2. Arrayen med alla uppgifter utom den med det id som skickades in görs om till en sträng med JSON.stringify
       3. Denna sträng sparas slutgilgingen till filen tasks.json, så att det kommer att finnas en uppdaterad lista som inte längre innehåller uppgiften med det id som skickades in via url:en. */
       await fs.writeFile(
-        './tasks.json',
+        './collections.json',
         JSON.stringify(currentTasks.filter((task) => task.id != id))
       );
       /* När den nya listan har skrivits till fil skickas ett success-response  */
