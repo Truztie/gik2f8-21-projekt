@@ -7,19 +7,16 @@ window.addEventListener('load', () => {
 });
 
 
-
 searchField.addEventListener('keyup', (e) =>
-  renderBookList(
+  renderCharacterList(
     characterList.filter(({name}) => {
       const searchTerm = e.target.value.toLowerCase();
-      return (
-        name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      return name.toLowerCase().includes(searchTerm.toLowerCase())
     })
   )
 );
 
-function renderBookList(characterList) {
+function renderCharacterList(characterList) {
   const existingElement = document.querySelector('.character-list');
   const root = document.getElementById('root');
   existingElement && root.removeChild(existingElement);
