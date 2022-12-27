@@ -5,6 +5,7 @@ let bookList = [];
 window.addEventListener('load', () => {
   getAll().then((apiStarWars) => (bookList = apiStarWars));
 });
+console.log(bookList);
 
 searchField.addEventListener('keyup', (e) =>
   renderBookList(
