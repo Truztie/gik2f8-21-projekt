@@ -3,7 +3,7 @@
 let characterList = [];
 
 window.addEventListener('load', () => {
-  getAll().then((apiCharacters) => console.log(apiCharacters));
+  getAll().then((apiCharacters) => (characterList = apiCharacters));
 });
 
 
@@ -20,7 +20,7 @@ function renderCharacterList(characterList) {
   const existingElement = document.querySelector('.character-list');
   const root = document.getElementById('root');
   existingElement && root.removeChild(existingElement);
-  characterList.length > 0 && searchField.value && root.insertAdjacentHTML('beforeend', CharacterList(characterList));
+  characterList.length > 0 && searchField.value && root.insertAdjacentHTML('beforeend', resultList(characterList));
 //   const listElement = document.querySelectorAll('.book-list__item');
 //   listElement.forEach((item) =>{
 
