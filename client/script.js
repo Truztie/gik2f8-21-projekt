@@ -1,9 +1,8 @@
 'use strict';
-
-let characterList = [];
+let characterList = []
 
 window.addEventListener('load', () => {
-  getAll().then((apiCharacters) => (characterList = apiCharacters));
+  getAll().then((apiCharacters) => (characterList = apiCharacters.results)).then((data) => console.log(data))
 });
 
 
@@ -11,7 +10,9 @@ searchField.addEventListener('keyup', (e) =>
   renderCharacterList(
     characterList.filter(({name}) => {
       const searchTerm = e.target.value.toLowerCase();
-      return name.toLowerCase().includes(searchTerm.toLowerCase())
+      return (
+        name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     })
   )
 );
@@ -20,7 +21,7 @@ function renderCharacterList(characterList) {
   const existingElement = document.querySelector('.character-list');
   const root = document.getElementById('root');
   existingElement && root.removeChild(existingElement);
-  characterList.length > 0 && searchField.value && root.insertAdjacentHTML('beforeend', resultList(characterList));
+  characterList.length > 0 && searchField.value && root.insertAdjacentHTML('beforeend', CharacterList(characterList));
 //   const listElement = document.querySelectorAll('.book-list__item');
 //   listElement.forEach((item) =>{
 
