@@ -4,17 +4,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My music collection</title>
+    <title>My StarWars App</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-tr from-teal-400 to-violet-500  h-screen">
-    <h1 class="text-slate-200 text-6xl text-center mt-4 mb-7">Music Finder</h1>
-  <main id="root"
-        class="bg-black/40 py-12 px-6 w-full md:w-4/5 mx-auto rounded-lg flex justify-center align-center flex-col gap-2">
-    <label class="text-slate-200 text-xl block" for="searchField">Search</label>
-    <input class="rounded-full p-2 border-2 border-slate-900 bg-slate-600 text-slate-200"
-           id="searchField"
-           type="text" />
+    <h1 class="text-slate-200 text-6xl text-center mt-4 mb-7">StarWars Character Finder</h1>
+  <main id="root" class="flex gap-10 w-full xl:w-4/5 mx-2 xl:mx-auto bg-black/50 p-5 rounded-lg"
+        style="box-shadow:10px 10px 30px #3b3b3b">
+      <section id="searchSection" class="flex-1">
+        <label class="text-slate-200 text-3xl block mb-6"
+               style="text-shadow:4px 4px 5px #000000"
+               for="searchField">Character Search</label>
+        <input class="w-full rounded-full p-2 border-2 border-slate-900 bg-slate-600 text-slate-200"
+               id="searchField"
+               type="text" />
+      </section>
+      <!-- Sektion där listan med uppgifter ska bo. Placeras bredvid formuläret. -->
+      <section class="flex-1 px-5">
+        <h2 class="mb-6 text-3xl text-slate-100"
+            style="text-shadow:4px 4px 5px #606061">Collection</h2>
+        <!-- Ul-element som kommer att fyllas på dynamiskt med li-element för varje uppgift i listan -->
+        <ul id="CollectionList">
+          <!-- Allt innanför här ska skapas dynamiskt med JavaScript, så se till att inget list-element läggs till här i denna HTML-fil.  -->
+        </ul>
+      </section>
   </main>
   <script src="apiStarWars.js"></script>
   <script src="script.js"></script>

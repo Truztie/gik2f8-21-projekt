@@ -27,7 +27,7 @@ app
   
   Notera att route-namnen döps om i lektion 6. De ska heta tasks, inte task, men felet är enligt videorna inte tillrättat i detta skede, så jag lämnar kvar det. 
   2. En callbackfunktion som kommer att köras när en sådan förfrågan görs. Callbackfunktionen tar (minst) två parametrar - ett requestobjekt och ett responseobjekt, som här kallas req och res. Callbackfunktionen är asynkron för att vi använder await inuti. */
-app.get('./collections.json', async (req, res) => {
+app.get('/collections', async (req, res) => {
   /* För enkel felhantering används try/catch */
   try {
     /* Node har en inbyggd modul som heter fs (importerades i början av denna fil). Den används här för att försöka läsa innehållet i en fil vid namn tasks.json. Anropet är asynkront så man sätter await innan (och async innan callbackfunktionen i app.get().) */
@@ -40,7 +40,7 @@ app.get('./collections.json', async (req, res) => {
   }
 });
 /* Express metod för att lyssna efter POST-anrop heter naturligt post(). I övrigt fungerar den likadant som  get */
-app.post('/tasks', async (req, res) => {
+app.post('/collections', async (req, res) => {
   try {
     /* Alla data från klienten finns i req-objektet. I req.body finns alla data, alltså själva innehållet i förfrågan. I detta fall den uppgift som ska sparas ned. */
     const task = req.body;
@@ -79,7 +79,7 @@ app.post('/tasks', async (req, res) => {
 /* Express metod för att lyssna efter DELETE-anrop heter naturligt delete(). I övrigt fungerar den likadant som get och post */
 
 /* Route-adressen som specificeras i delete har /:id i tillägg till adressen. Det betyder att man i adressen kan skriva task följt av ett / och sedan något som kommer att sparas i en egenskap vid namn id. :id betyder att det som står efter / kommer att heta id i requestobjektet. Hade kunnat vara vad som helst. Så här möjliggörs att lyssna efter DELETE-anrop på exempelvis url:en localhost:5000/task/1 där 1 då skulle motsvara ett id på den uppgift man vill ta bort */
-app.delete('/tasks/:id', async (req, res) => {
+app.delete('/collections/:id', async (req, res) => {
   console.log(req);
   try {
     /* För att nå egenskaper tagna ur url:en  använder man req.params och sedan namnet som man gett egenskapen, i detta fall id, då vi skrev :id. */
@@ -110,4 +110,4 @@ app.delete('/tasks/:id', async (req, res) => {
   }
 });
 
-app.listen(8888, () => console.log('Server running on http://localhost:8888'));
+app.listen(5000, () => console.log('Server running on http://localhost:5000'));
