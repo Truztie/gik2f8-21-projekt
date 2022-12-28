@@ -18,7 +18,7 @@ searchField.addEventListener('keyup', (e) =>
 
 function renderCharacterList(characterList) {
   const existingElement = document.querySelector('.character-list');
-  const root = document.getElementById('searchSection');
+  const searchSection = document.getElementById('searchSection');
   existingElement && searchSection.removeChild(existingElement);
   characterList.length > 0 && searchField.value && searchSection.insertAdjacentHTML('beforeend', CharacterList(characterList));
 //   const listElement = document.querySelectorAll('.book-list__item');
