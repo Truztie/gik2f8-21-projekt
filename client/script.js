@@ -2,7 +2,8 @@
 let characterList = []
 
 window.addEventListener('load', () => {
-    getAll().then((apiCharacters) => (characterList = apiCharacters.results))
+    getAll().then((result) => (characterList = result))
+    console.log(characterList);
 });
 
 searchField.addEventListener('keyup', (e) =>

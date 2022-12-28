@@ -4,7 +4,7 @@ async function getAll() {
   const result = await fetch(url)
     .then((result) => result.json())
     .catch((e) => e);
-  return result;
+  return result;s
 }*/
 async function getAll() {
   const result = [];
@@ -19,5 +19,5 @@ async function getAll() {
   } while(url)
 
   return result;
-  
+  console.log(result);
 }
