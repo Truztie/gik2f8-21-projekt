@@ -15,9 +15,7 @@ async function getAll() {
     const { results, next } = await res.json();
     result.push(...results);
     url = next;
-    console.log(result);
   } while(url)
 
   return result;
-  console.log(result);
 }

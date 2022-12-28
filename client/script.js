@@ -3,7 +3,6 @@ let characterList = []
 
 window.addEventListener('load', () => {
     getAll().then((result) => (characterList = result))
-    console.log(characterList);
 });
 
 searchField.addEventListener('keyup', (e) =>
