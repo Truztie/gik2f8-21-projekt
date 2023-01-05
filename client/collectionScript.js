@@ -105,7 +105,7 @@ function onAddToCollection(e) {
   e.preventDefault();
   /* Ytterligare en koll görs om alla fält är godkända, ifall man varken skrivit i eller lämnat något fält. */
     /* Log för att se om man kommit förbi valideringen */
-  console.log('Submit');
+  console.log(e);
 
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
   saveTask();
