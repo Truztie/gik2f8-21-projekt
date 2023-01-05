@@ -1,29 +1,30 @@
-/* Form-element ligger direkt på document-objektet och är globalt. Det betyder att man kan komma åt det utan att hämta upp det via exempelvis document.getElementById. 
-Andra element, såsom t.ex. ett div-element behöver hämtas ur HTML-dokumentet för att kunna hämtas i JavaScript. 
+/* Form-element ligger direkt på document-objektet och är globalt. Det betyder att man kan komma åt det utan att hämta upp det via exempelvis document.getElementById.
+Andra element, såsom t.ex. ett div-element behöver hämtas ur HTML-dokumentet för att kunna hämtas i JavaScript.
 Man skulle behöva skriva const todoList = document.getElemenetById("todoList"), för att hämta det elementet och sedan komma åt det via variabeln todoList. För formulär behöver man inte det steget, utan kan direkt använda todoForm (det id- och name-attribut som vi gav form-elementet), utan att man först skapar variabeln och hämtar form-elementet.
 */
 
-/* På samma sätt kommer man åt alla fält i todoForm via dess name eller id-attribut. Så här kan vi använda title för att nå input-fältet title, som i HTML ser ut såhär: 
-<input type="text" id="title" name="title" class="w-full rounded-md border-yellow-500 border-2 focus-within:outline-none focus:border-yellow-600 px-4 py-2" /> 
+/* På samma sätt kommer man åt alla fält i todoForm via dess name eller id-attribut. Så här kan vi använda title för att nå input-fältet title, som i HTML ser ut såhär:
+<input type="text" id="title" name="title" class="w-full rounded-md border-yellow-500 border-2 focus-within:outline-none focus:border-yellow-600 px-4 py-2" />
 Nedan används därför todoForm.[fältnamn] för att sätta eventlyssnare på respektive fält i formuläret.*/
 
-/* Eventen som ska fångas upp är 
-1. När någon ställt muspekaren i inputfältet och trycker på en tangent 
-2. När någon lämnar fältet, dvs. klickar utanför det eller markerar nästa fält. 
+/* Eventen som ska fångas upp är
+1. När någon ställt muspekaren i inputfältet och trycker på en tangent
+2. När någon lämnar fältet, dvs. klickar utanför det eller markerar nästa fält.
 För att fånga tangenttryck kan man exempelvis använda eventtypen "keyup" och för att fånga eventet att någon lämnar fältet använder man eventtypen "blur" */
 
 
 /* Här hämtas list-elementet upp ur HTML-koden. Alltså det element som vi ska skriva ut listelement innehållande varje enskild uppgift i. */
 const collectionListElement = document.getElementById('collectionList');
+const addToCollectionButton = document.querySelector('.addButton');
 /* Jag använder oftast getElementById, men andra sätt är att t.ex. använda querySelector och skicka in en css-selektor. I detta fall skulle man kunna skriva document.querySelector("#todoList"), eftersom # i css hittar specifika id:n. Ett annat sätt vore att använda elementet document.querySelector("ul"), men det är lite osäkert då det kan finnas flera ul-element på sidan. Det går också bra att hämta på klassnamn document.querySelector(".todoList") om det hade funnits ett element med sådan klass (det gör det inte). Klasser är inte unika så samma kan finnas hos flera olika element och om man vill hämta just flera element är det vanligt att söka efter dem via ett klassnamn. Det man behöver veta då är att querySelector endast kommer att innehålla ett enda element, även om det finns flera. Om man vill hitta flera element med en viss klass bör man istället använda querySelectorAll.  */
 
 /* Här anges startvärde för tre stycken variabler som ska användas vid validering av formulär. P.g.a. lite problem som bl.a. har med liveServer att göra, men också att formuläret inte rensas har dessa satts till true från början, även om det inte blir helt rätt. Dessa ska i alla fall tala om för applikationen om de olika fälten i formulären har fått godkänd input.  */
 let inCollectionValid = true;
 
-/* Här skapas en instans av api-klassen som finns i filen Api.js. 
-Där skrevs en konstruktor, som skulle ta emot en url. 
-constructor(url) {...} 
-Denna url skickas in till Api-klassen genom att man anger new, klassens namn (Api), parenteser. Inom parenteserna skickas sedan det som konstruktorn vill ta emot - dvs. url:en till vårt api. 
+/* Här skapas en instans av api-klassen som finns i filen Api.js.
+Där skrevs en konstruktor, som skulle ta emot en url.
+constructor(url) {...}
+Denna url skickas in till Api-klassen genom att man anger new, klassens namn (Api), parenteser. Inom parenteserna skickas sedan det som konstruktorn vill ta emot - dvs. url:en till vårt api.
 Adressen som skickas in är http://localhost:5000/tasks och innan det fungerar är det viktigt att ändra det i servern. I Lektion 5 sattes alla routes till /task. Dessa ska ändras till /tasks. Dessa routes är första argumenten till app.get, app.post och app.delete, så det ser ut ungefär app.get("/task",...). Alla sådana ska ändras till "/tasks". */
 const api = new ApiCollection('http://localhost:5000/collections');
 
@@ -32,7 +33,7 @@ Funktionen tar emot en parameter - field - som den får genom att e.target skick
 // function validateField(keypress) {
 //   /* Destructuring används för att plocka ut endast egenskaperna name och value ur en rad andra egenskaper som field har. Mer om destructuring https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment */
 
-//   /* Name är det name-attribut som finns på HTML-taggen. title i detta exempel: <input type="text" id="title" name="title" /> 
+//   /* Name är det name-attribut som finns på HTML-taggen. title i detta exempel: <input type="text" id="title" name="title" />
 //   value är innehållet i fältet, dvs. det någon skrivit. */
 //   const { name, value } = field;
 
@@ -85,10 +86,10 @@ Funktionen tar emot en parameter - field - som den får genom att e.target skick
 //       break;
 //     }
 //   }
-//   /* När alla fall sökts igenom sätts här attribut på fältets förra syskon-element, previousElementSibling. 
-//   Det fungerar så att alla element som ligger inom samma element är syskon. I index.html omsluts alla <input>-element av ett <section>-element. I samma <section>-element finns ett <label>-element och ett <p>-element  <p>-elementen ligger innan <input>-elementen, så alla <p>-element är föregående syskon till alla <input>-element - previousSiblingElement. 
-  
-//   så field.previousElementSibling hittar det <p>-element som ligger innan det inputfält som någon just nu har skrivit i eller lämnat. 
+//   /* När alla fall sökts igenom sätts här attribut på fältets förra syskon-element, previousElementSibling.
+//   Det fungerar så att alla element som ligger inom samma element är syskon. I index.html omsluts alla <input>-element av ett <section>-element. I samma <section>-element finns ett <label>-element och ett <p>-element  <p>-elementen ligger innan <input>-elementen, så alla <p>-element är föregående syskon till alla <input>-element - previousSiblingElement.
+
+//   så field.previousElementSibling hittar det <p>-element som ligger innan det inputfält som någon just nu har skrivit i eller lämnat.
 //   */
 
 //   /* <p>-elementets innerText (textinnehåll) sätts till den sträng som validationMessage innehåller - information om att titeln är för kort, exempelvis.  */
@@ -96,25 +97,23 @@ Funktionen tar emot en parameter - field - som den får genom att e.target skick
 //   /* Tailwind har en klass som heter "hidden". Om valideringsmeddelandet ska synas vill vi förstås inte att <p>-elementet ska vara hidden, så den klassen tas bort. */
 //   field.previousElementSibling.classList.remove('hidden');
 // }
-
+console.log(addToCollectionButton);
 /* Callbackfunktion som används för eventlyssnare när någon klickar på knappen av typen submit */
 function onAddToCollection(character) {
   /* Standardbeteendet hos ett formulär är att göra så att webbsidan laddas om när submit-eventet triggas. I denna applikation vill vi fortsätta att köra JavaScript-kod för att behandla formulärets innehåll och om webbsidan skulle ladda om i detta skede skulle det inte gå.   */
   /* Då kan man använda eventets metod preventDefault för att förhindra eventets standardbeteende, där submit-eventets standardbeteende är att ladda om webbsidan.  */
   /* Ytterligare en koll görs om alla fält är godkända, ifall man varken skrivit i eller lämnat något fält. */
     /* Log för att se om man kommit förbi valideringen */
-  console.log(character);
-
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
-  saveTask(character);
+//   saveTask(name);
 }
 
 /* Funktion för att ta hand om formulärets data och skicka det till api-klassen. */
-function saveTask(character) {
+function saveTask(name) {
   /* Ett objekt vid namn task byggs ihop med hjälp av formulärets innehåll */
   /* Eftersom vi kan komma åt fältet via dess namn - todoForm - och alla formulärets fält med dess namn - t.ex. title - kan vi använda detta för att sätta värden hos ett objekt. Alla input-fält har sitt innehåll lagrat i en egenskap vid namn value (som också används i validateField-funktionen, men där har egenskapen value "destrukturerats" till en egen variabel. ) */
   const chara = {
-    name: character.name
+    name: name
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
 
@@ -122,9 +121,9 @@ function saveTask(character) {
 
   /* Vår Api-klass har en create-metod. Vi skapade alltså en metod som kallas create i Api.js som ansvarar för att skicka POST-förfrågningar till vårt eget backend. Denna kommer vi nu åt genom att anropa den hos api-objektet.  */
 
-  /* Create är asynkron och returnerar därför ett promise. När hela serverkommunikationen och create-metoden själv har körts färdigt, kommer then() att anropa. Till then skickas den funktion som ska hantera det som kommer tillbaka från backend via vår egen api-klass.  
-  
-  Callbackfunktionen som används i then() är en anonym arrow-function som tar emot innehållet i det promise som create returnerar och lagrar det i variabeln chara. 
+  /* Create är asynkron och returnerar därför ett promise. När hela serverkommunikationen och create-metoden själv har körts färdigt, kommer then() att anropa. Till then skickas den funktion som ska hantera det som kommer tillbaka från backend via vår egen api-klass.
+
+  Callbackfunktionen som används i then() är en anonym arrow-function som tar emot innehållet i det promise som create returnerar och lagrar det i variabeln chara.
   */
 
   api.create(chara).then((chara) => {
@@ -142,7 +141,7 @@ function renderList() {
   console.log('rendering');
 
   /* Anrop till getAll hos vårt api-objekt. Metoden skapades i Api.js och har hand om READ-förfrågningar mot vårt backend. */
-  api.getAll().then((charList) => {
+  api.getAll().then((chars) => {
     /* När vi fått svaret från den asynkrona funktionen getAll, körs denna anonyma arrow-funktion som skickats till then() */
 
     /* Här används todoListElement, en variabel som skapades högt upp i denna fil med koden const todoListElement = document.getElementById('todoList');
@@ -154,8 +153,8 @@ function renderList() {
     /* De hämtade uppgifterna från servern via api:et getAll-funktion får heta tasks, eftersom callbackfunktionen som skickades till then() har en parameter som är döpt så. Det är tasks-parametern som är innehållet i promiset. */
 
     /* Koll om det finns någonting i tasks och om det är en array med längd större än 0 */
-    if (charList && charList.length > 0) {
-      charList.sort((a,b) => {
+    if (chars && chars.length > 0) {
+      chars.sort((a,b) => {
         if (a.name< b.name) {
           return -1;
         }
@@ -165,15 +164,15 @@ function renderList() {
         return 0;
       });
       /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
-      charList.forEach((char) => {
+      chars.forEach((char) => {
         collectionListElement.insertAdjacentHTML('beforeend', renderTask(char))
-        
+
         /* Om vi bryter ned nedanstående rad får vi något i stil med:
         1. todoListElement: ul där alla uppgifter ska finnas
         2. insertAdjacentHTML: DOM-metod som gör att HTML kan läggas till inuti ett element på en given position
-        3. "beforeend": positionen där man vill lägga HTML-koden, i detta fall i slutet av todoListElement, alltså längst ned i listan. 
-        4. renderTask(task) - funktion som returnerar HTML. 
-        5. task (objekt som representerar en uppgift som finns i arrayen) skickas in till renderTask, för att renderTask ska kunna skapa HTML utifrån egenskaper hos uppgifts-objektet. 
+        3. "beforeend": positionen där man vill lägga HTML-koden, i detta fall i slutet av todoListElement, alltså längst ned i listan.
+        4. renderTask(task) - funktion som returnerar HTML.
+        5. task (objekt som representerar en uppgift som finns i arrayen) skickas in till renderTask, för att renderTask ska kunna skapa HTML utifrån egenskaper hos uppgifts-objektet.
         */
 
         /* Denna kod körs alltså en gång per element i arrayen tasks, dvs. en  gång för varje uppgiftsobjekt i listan. */
@@ -182,54 +181,29 @@ function renderList() {
   });
 }
 
-/* renderTask är en funktion som returnerar HTML baserat på egenskaper i ett uppgiftsobjekt. 
+/* renderTask är en funktion som returnerar HTML baserat på egenskaper i ett uppgiftsobjekt.
 Endast en uppgift åt gången kommer att skickas in här, eftersom den anropas inuti en forEach-loop, där uppgifterna loopas igenom i tur och ordning.  */
 
 /* Destructuring används för att endast plocka ut vissa egenskaper hos uppgifts-objektet. Det hade kunnat stå function renderTask(task) {...} här - för det är en hel task som skickas in - men då hade man behövt skriva task.id, task.title osv. på alla ställen där man ville använda dem. Ett trick är alltså att "bryta ut" dessa egenskaper direkt i funktionsdeklarationen istället. Så en hel task skickas in när funktionen anropas uppe i todoListElement.insertAdjacentHTML("beforeend", renderTask(task)), men endast vissa egenskaper ur det task-objektet tas emot här i funktionsdeklarationen. */
-function renderTask({ id, title, description, dueDate, completed}) {
+function renderTask({ id, name}) {
   /* Baserat på inskickade egenskaper hos task-objektet skapas HTML-kod med styling med hjälp av tailwind-klasser. Detta görs inuti en templatestring  (inom`` för att man ska kunna använda variabler inuti. Dessa skrivs inom ${}) */
   /*
-  Det som skrivs inom `` är vanlig HTML, men det kan vara lite svårt att se att det är så. Om man enklare vill se hur denna kod fungerar kan man klistra in det i ett HTML-dokument, för då får man färgkodning och annat som kan underlätta. Om man gör det kommer dock ${...} inte innehålla texten i variabeln utan bara skrivas ut som det är. Men det är lättare att felsöka just HTML-koden på det sättet i alla fall. 
+  Det som skrivs inom `` är vanlig HTML, men det kan vara lite svårt att se att det är så. Om man enklare vill se hur denna kod fungerar kan man klistra in det i ett HTML-dokument, för då får man färgkodning och annat som kan underlätta. Om man gör det kommer dock ${...} inte innehålla texten i variabeln utan bara skrivas ut som det är. Men det är lättare att felsöka just HTML-koden på det sättet i alla fall.
   */
-  /* Lite kort om vad HTML-koden innehåller. Det mesta är bara struktur och Tailwind-styling enligt eget tycke och smak. Värd att nämna extra är dock knappen, <button>-elementet, en bit ned. Där finns ett onclick-attribut som kopplar en eventlyssnare till klickeventet. Eventlyssnaren här heter onDelete och den får med sig egenskapen id, som vi fått med oss från task-objektet. Notera här att det går bra att sätta parenteser och skicka in id på detta viset här, men man fick inte sätta parenteser på eventlyssnare när de kopplades med addEventListener (som för formulärfälten högre upp i koden). En stor del av föreläsning 3 rörande funktioner och event förklarar varför man inte får sätta parenteser på callbackfunktioner i JavaScriptkod. 
+  /* Lite kort om vad HTML-koden innehåller. Det mesta är bara struktur och Tailwind-styling enligt eget tycke och smak. Värd att nämna extra är dock knappen, <button>-elementet, en bit ned. Där finns ett onclick-attribut som kopplar en eventlyssnare till klickeventet. Eventlyssnaren här heter onDelete och den får med sig egenskapen id, som vi fått med oss från task-objektet. Notera här att det går bra att sätta parenteser och skicka in id på detta viset här, men man fick inte sätta parenteser på eventlyssnare när de kopplades med addEventListener (som för formulärfälten högre upp i koden). En stor del av föreläsning 3 rörande funktioner och event förklarar varför man inte får sätta parenteser på callbackfunktioner i JavaScriptkod.
   När eventlyssnaren kopplas till knappen här nedanför, görs det däremot i HTML-kod och inte JavaScript. Man sätter ett HTML-attribut och refererar till eventlyssnarfunktionen istället. Då fungerar det annorlunda och parenteser är tillåtna. */
   let html = `
-    <li class="select-none mt-2 p-3 ${completed ? "bg-emerald-200" : ""} rounded-md border-2 border-violet-400 hover:border-fuchsia-500"
+    <li class="select-none mt-2 p-3 rounded-md border-2 border-violet-400 hover:border-fuchsia-500"
               style="box-shadow:2px 2px 8px #3b3b3b" >
       <div class="flex items-center">
         <div id="inputContainer${id}">
-          <input type="checkbox" ${completed ? "checked" : ""} onclick="updateTask(${id}) "id="checkBox${id}" 
-            class=" appearance-none rounded-md border-2 border-violet-400 bg-violet-300 checked:bg-green-500 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500"/>
-          <style>
-            input[type="checkbox"]:checked:before{
-              content: "✔";
-              font-size: 14px;
-            }
-            input[type="checkbox"]:before{
-              content: "✖";
-              font-size: 14px;
-            }
-          </style>
-        </div> 
-        <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${title}</h3>
+        </div>
+        <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${name}</h3>
         <div>
-          <span>${dueDate}</span>
+          <span>hej</span>
           <button onclick="deleteTask(${id})" class="inline-block bg-violet-300 text-md text-slate-900 border-2 border-violet-400 px-3 py-1 rounded-md ml-2 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500">Ta bort</button>
         </div>
-      </div>`;
-
-  /* Här har templatesträngen avslutats tillfälligt för att jag bara vill skriva ut kommande del av koden om description faktiskt finns */
-
-  description &&
-    /* Med hjälp av && kan jag välja att det som står på andra sidan && bara ska utföras om description faktiskt finns.  */
-
-    /* Det som ska göras om description finns är att html-variabeln ska byggas på med HTML-kod som visar det som finns i description-egenskapen hos task-objektet. */
-    (html += `
-      <p class="ml-8 mt-2 text-md italic">${description}</p>
-  `);
-
-  /* När html-strängen eventuellt har byggts på med HTML-kod för description-egenskapen läggs till sist en sträng motsvarande sluttaggen för <li>-elementet dit. */
-  html += `
+      </div>
     </li>`;
   /***********************Labb 2 ***********************/
   /* I ovanstående template-sträng skulle det vara lämpligt att sätta en checkbox, eller ett annat element som någon kan klicka på för att markera en uppgift som färdig. Det elementet bör, likt knappen för delete, också lyssna efter ett event (om du använder en checkbox, kolla på exempelvis w3schools vilket element som triggas hos en checkbox när dess värde förändras.). Skapa en eventlyssnare till det event du finner lämpligt. Funktionen behöver nog ta emot ett id, så den vet vilken uppgift som ska markeras som färdig. Det skulle kunna vara ett checkbox-element som har attributet on[event]="updateTask(id)". */
@@ -252,25 +226,25 @@ function deleteTask(id) {
 }
 
 /***********************Labb 2 ***********************/
-/* Här skulle det vara lämpligt att skriva den funktion som angivits som eventlyssnare för när någon markerar en uppgift som färdig. Jag pratar alltså om den eventlyssnare som angavs i templatesträngen i renderTask. Det kan t.ex. heta updateTask. 
-  
+/* Här skulle det vara lämpligt att skriva den funktion som angivits som eventlyssnare för när någon markerar en uppgift som färdig. Jag pratar alltså om den eventlyssnare som angavs i templatesträngen i renderTask. Det kan t.ex. heta updateTask.
+
 Funktionen bör ta emot ett id som skickas från <li>-elementet.
 */
-function updateTask(id){
-  const checkBox = document.getElementById(`checkBox${id}`);
-  if(checkBox.checked == true){
-    const done = {"completed": true};
-    api.update(id, done).then((result) => renderList());
-  }else{
-    const unfinished = {"completed": false};
-    api.update(id, unfinished).then((result) => renderList());
-  }
-}
+// function updateTask(id){
+//   const checkBox = document.getElementById(`checkBox${id}`);
+//   if(checkBox.checked == true){
+//     const done = {"completed": true};
+//     api.update(id, done).then((result) => renderList());
+//   }else{
+//     const unfinished = {"completed": false};
+//     api.update(id, unfinished).then((result) => renderList());
+//   }
+// }
 
-/* Inuti funktionen kan ett objekt skickas till api-metoden update. Objektet ska som minst innehålla id på den uppgift som ska förändras, samt egenskapen completed som true eller false, beroende på om uppgiften markerades som färdig eller ofärdig i gränssnittet. 
-Det finns några sätt att utforma det som ska skickas till api.update-metoden. 
+/* Inuti funktionen kan ett objekt skickas till api-metoden update. Objektet ska som minst innehålla id på den uppgift som ska förändras, samt egenskapen completed som true eller false, beroende på om uppgiften markerades som färdig eller ofärdig i gränssnittet.
+Det finns några sätt att utforma det som ska skickas till api.update-metoden.
 Alternativ 1: objektet består av ett helt task-objekt, som också inkluderar förändringen. Exempel: {id: 1,  title: "x", description: "x", dueDate: "x", completed: true/false}
-Alternativ 2: objektet består bara av förändringarna och id på den uppgift som ska förändras. Exempel: {id: 1, completed: true/false } 
+Alternativ 2: objektet består bara av förändringarna och id på den uppgift som ska förändras. Exempel: {id: 1, completed: true/false }
 Om du hittar något annat sätt som funkar för dig, använd för all del det, så länge det uppnår samma sak. :)
 */
 
