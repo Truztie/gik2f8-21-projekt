@@ -18,7 +18,7 @@ const collectionListElement = document.getElementById('collectionList');
 /* Jag använder oftast getElementById, men andra sätt är att t.ex. använda querySelector och skicka in en css-selektor. I detta fall skulle man kunna skriva document.querySelector("#todoList"), eftersom # i css hittar specifika id:n. Ett annat sätt vore att använda elementet document.querySelector("ul"), men det är lite osäkert då det kan finnas flera ul-element på sidan. Det går också bra att hämta på klassnamn document.querySelector(".todoList") om det hade funnits ett element med sådan klass (det gör det inte). Klasser är inte unika så samma kan finnas hos flera olika element och om man vill hämta just flera element är det vanligt att söka efter dem via ett klassnamn. Det man behöver veta då är att querySelector endast kommer att innehålla ett enda element, även om det finns flera. Om man vill hitta flera element med en viss klass bör man istället använda querySelectorAll.  */
 
 /* Här anges startvärde för tre stycken variabler som ska användas vid validering av formulär. P.g.a. lite problem som bl.a. har med liveServer att göra, men också att formuläret inte rensas har dessa satts till true från början, även om det inte blir helt rätt. Dessa ska i alla fall tala om för applikationen om de olika fälten i formulären har fått godkänd input.  */
-let inCollenctionValid = true;
+let inCollectionValid = true;
 
 /* Här skapas en instans av api-klassen som finns i filen Api.js. 
 Där skrevs en konstruktor, som skulle ta emot en url. 
@@ -102,10 +102,9 @@ function onAddToCollection(e) {
   /* Standardbeteendet hos ett formulär är att göra så att webbsidan laddas om när submit-eventet triggas. I denna applikation vill vi fortsätta att köra JavaScript-kod för att behandla formulärets innehåll och om webbsidan skulle ladda om i detta skede skulle det inte gå.   */
 
   /* Då kan man använda eventets metod preventDefault för att förhindra eventets standardbeteende, där submit-eventets standardbeteende är att ladda om webbsidan.  */
-  e.preventDefault();
   /* Ytterligare en koll görs om alla fält är godkända, ifall man varken skrivit i eller lämnat något fält. */
     /* Log för att se om man kommit förbi valideringen */
-  console.log(e);
+  console.log("hej");
 
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
   saveTask();
@@ -116,7 +115,7 @@ function saveTask() {
   /* Ett objekt vid namn task byggs ihop med hjälp av formulärets innehåll */
   /* Eftersom vi kan komma åt fältet via dess namn - todoForm - och alla formulärets fält med dess namn - t.ex. title - kan vi använda detta för att sätta värden hos ett objekt. Alla input-fält har sitt innehåll lagrat i en egenskap vid namn value (som också används i validateField-funktionen, men där har egenskapen value "destrukturerats" till en egen variabel. ) */
   const task = {
-    title: todoForm.title.value,
+    name: todoForm.title.value,
     description: todoForm.description.value,
     dueDate: todoForm.dueDate.value,
     completed: false
