@@ -98,24 +98,23 @@ Funktionen tar emot en parameter - field - som den får genom att e.target skick
 // }
 
 /* Callbackfunktion som används för eventlyssnare när någon klickar på knappen av typen submit */
-function onAddToCollection(e) {
+function onAddToCollection(character) {
   /* Standardbeteendet hos ett formulär är att göra så att webbsidan laddas om när submit-eventet triggas. I denna applikation vill vi fortsätta att köra JavaScript-kod för att behandla formulärets innehåll och om webbsidan skulle ladda om i detta skede skulle det inte gå.   */
-
   /* Då kan man använda eventets metod preventDefault för att förhindra eventets standardbeteende, där submit-eventets standardbeteende är att ladda om webbsidan.  */
   /* Ytterligare en koll görs om alla fält är godkända, ifall man varken skrivit i eller lämnat något fält. */
     /* Log för att se om man kommit förbi valideringen */
-  console.log("hej");
+  console.log(character);
 
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
-  saveTask();
+  saveTask(character);
 }
 
 /* Funktion för att ta hand om formulärets data och skicka det till api-klassen. */
-function saveTask() {
+function saveTask(character) {
   /* Ett objekt vid namn task byggs ihop med hjälp av formulärets innehåll */
   /* Eftersom vi kan komma åt fältet via dess namn - todoForm - och alla formulärets fält med dess namn - t.ex. title - kan vi använda detta för att sätta värden hos ett objekt. Alla input-fält har sitt innehåll lagrat i en egenskap vid namn value (som också används i validateField-funktionen, men där har egenskapen value "destrukturerats" till en egen variabel. ) */
   const chara = {
-    name: CharacterList.name
+    name: character.name
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
 
@@ -143,37 +142,31 @@ function renderList() {
   console.log('rendering');
 
   /* Anrop till getAll hos vårt api-objekt. Metoden skapades i Api.js och har hand om READ-förfrågningar mot vårt backend. */
-  api.getAll().then((tasks) => {
+  api.getAll().then((charList) => {
     /* När vi fått svaret från den asynkrona funktionen getAll, körs denna anonyma arrow-funktion som skickats till then() */
 
     /* Här används todoListElement, en variabel som skapades högt upp i denna fil med koden const todoListElement = document.getElementById('todoList');
      */
 
     /* Först sätts dess HTML-innehåll till en tom sträng. Det betyder att alla befintliga element och all befintlig text inuti todoListElement tas bort. Det kan nämligen finnas list-element däri när denna kod körs, men de tas här bort för att hela listan ska uppdateras i sin helhet. */
-    todoListElement.innerHTML = '';
+    collectionListElement.innerHTML = '';
 
     /* De hämtade uppgifterna från servern via api:et getAll-funktion får heta tasks, eftersom callbackfunktionen som skickades till then() har en parameter som är döpt så. Det är tasks-parametern som är innehållet i promiset. */
 
     /* Koll om det finns någonting i tasks och om det är en array med längd större än 0 */
-    if (tasks && tasks.length > 0) {
-      tasks.sort((a,b) => {
-        if(a.completed && !b.completed){
-          return 1;
-        }
-        if(!a.completed && b.completed){
+    if (charList && charList.length > 0) {
+      charList.sort((a,b) => {
+        if (a.name< b.name) {
           return -1;
         }
-        if (a.dueDate < b.dueDate) {
-          return -1;
-        }
-        if (a.dueDate > b.dueDate) {
+        if (a.name > b.name) {
           return 1;
         }
         return 0;
       });
       /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
-      tasks.forEach((task) => {
-        todoListElement.insertAdjacentHTML('beforeend', renderTask(task))
+      charList.forEach((char) => {
+        collectionListElement.insertAdjacentHTML('beforeend', renderTask(char))
         
         /* Om vi bryter ned nedanstående rad får vi något i stil med:
         1. todoListElement: ul där alla uppgifter ska finnas
