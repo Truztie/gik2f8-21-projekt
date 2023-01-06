@@ -197,9 +197,9 @@ function renderTask({ id, name}) {
       <div class="flex items-center">
         <div id="inputContainer${id}">
         </div>
-        <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${name}</h3>
+        <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase"> ${name} </h3>
         <div>
-          <span>hej</span>
+       
           <button onclick="deleteTask(${id})" class="inline-block bg-violet-300 text-md text-slate-900 border-2 border-violet-400 px-3 py-1 rounded-md ml-2 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500">Ta bort</button>
         </div>
       </div>
