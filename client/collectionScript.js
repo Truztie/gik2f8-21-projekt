@@ -15,7 +15,6 @@ För att fånga tangenttryck kan man exempelvis använda eventtypen "keyup" och 
 
 /* Här hämtas list-elementet upp ur HTML-koden. Alltså det element som vi ska skriva ut listelement innehållande varje enskild uppgift i. */
 const collectionListElement = document.getElementById('collectionList');
-const addToCollectionButton = document.getElementById('addButton');
 /* Jag använder oftast getElementById, men andra sätt är att t.ex. använda querySelector och skicka in en css-selektor. I detta fall skulle man kunna skriva document.querySelector("#todoList"), eftersom # i css hittar specifika id:n. Ett annat sätt vore att använda elementet document.querySelector("ul"), men det är lite osäkert då det kan finnas flera ul-element på sidan. Det går också bra att hämta på klassnamn document.querySelector(".todoList") om det hade funnits ett element med sådan klass (det gör det inte). Klasser är inte unika så samma kan finnas hos flera olika element och om man vill hämta just flera element är det vanligt att söka efter dem via ett klassnamn. Det man behöver veta då är att querySelector endast kommer att innehålla ett enda element, även om det finns flera. Om man vill hitta flera element med en viss klass bör man istället använda querySelectorAll.  */
 
 /* Här anges startvärde för tre stycken variabler som ska användas vid validering av formulär. P.g.a. lite problem som bl.a. har med liveServer att göra, men också att formuläret inte rensas har dessa satts till true från början, även om det inte blir helt rätt. Dessa ska i alla fall tala om för applikationen om de olika fälten i formulären har fått godkänd input.  */
@@ -97,7 +96,6 @@ Funktionen tar emot en parameter - field - som den får genom att e.target skick
 //   /* Tailwind har en klass som heter "hidden". Om valideringsmeddelandet ska synas vill vi förstås inte att <p>-elementet ska vara hidden, så den klassen tas bort. */
 //   field.previousElementSibling.classList.remove('hidden');
 // }
-addToCollectionButton.addEventListener("click", onAddToCollection());
 /* Callbackfunktion som används för eventlyssnare när någon klickar på knappen av typen submit */
 function onAddToCollection(character) {
   console.log(character)
