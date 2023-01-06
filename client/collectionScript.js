@@ -104,15 +104,15 @@ function onAddToCollection(character) {
   /* Ytterligare en koll görs om alla fält är godkända, ifall man varken skrivit i eller lämnat något fält. */
     /* Log för att se om man kommit förbi valideringen */
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
-//   saveTask(name);
+   saveTask(character);
 }
 
 /* Funktion för att ta hand om formulärets data och skicka det till api-klassen. */
-function saveTask(name) {
+function saveTask(character) {
   /* Ett objekt vid namn task byggs ihop med hjälp av formulärets innehåll */
   /* Eftersom vi kan komma åt fältet via dess namn - todoForm - och alla formulärets fält med dess namn - t.ex. title - kan vi använda detta för att sätta värden hos ett objekt. Alla input-fält har sitt innehåll lagrat i en egenskap vid namn value (som också används i validateField-funktionen, men där har egenskapen value "destrukturerats" till en egen variabel. ) */
   const chara = {
-    name: name
+    name: character
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
 
