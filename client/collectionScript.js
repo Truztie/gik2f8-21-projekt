@@ -1,18 +1,5 @@
-/* Form-element ligger direkt på document-objektet och är globalt. Det betyder att man kan komma åt det utan att hämta upp det via exempelvis document.getElementById.
-Andra element, såsom t.ex. ett div-element behöver hämtas ur HTML-dokumentet för att kunna hämtas i JavaScript.
-Man skulle behöva skriva const todoList = document.getElemenetById("todoList"), för att hämta det elementet och sedan komma åt det via variabeln todoList. För formulär behöver man inte det steget, utan kan direkt använda todoForm (det id- och name-attribut som vi gav form-elementet), utan att man först skapar variabeln och hämtar form-elementet.
-*/
 
-/* På samma sätt kommer man åt alla fält i todoForm via dess name eller id-attribut. Så här kan vi använda title för att nå input-fältet title, som i HTML ser ut såhär:
-<input type="text" id="title" name="title" class="w-full rounded-md border-yellow-500 border-2 focus-within:outline-none focus:border-yellow-600 px-4 py-2" />
-Nedan används därför todoForm.[fältnamn] för att sätta eventlyssnare på respektive fält i formuläret.*/
 
-/* Eventen som ska fångas upp är
-1. När någon ställt muspekaren i inputfältet och trycker på en tangent
-2. När någon lämnar fältet, dvs. klickar utanför det eller markerar nästa fält.
-För att fånga tangenttryck kan man exempelvis använda eventtypen "keyup" och för att fånga eventet att någon lämnar fältet använder man eventtypen "blur" */
-
-/* Här hämtas list-elementet upp ur HTML-koden. Alltså det element som vi ska skriva ut listelement innehållande varje enskild uppgift i. */
 const collectionListElement = document.getElementById('collectionList');
 /* Jag använder oftast getElementById, men andra sätt är att t.ex. använda querySelector och skicka in en css-selektor. I detta fall skulle man kunna skriva document.querySelector("#todoList"), eftersom # i css hittar specifika id:n. Ett annat sätt vore att använda elementet document.querySelector("ul"), men det är lite osäkert då det kan finnas flera ul-element på sidan. Det går också bra att hämta på klassnamn document.querySelector(".todoList") om det hade funnits ett element med sådan klass (det gör det inte). Klasser är inte unika så samma kan finnas hos flera olika element och om man vill hämta just flera element är det vanligt att söka efter dem via ett klassnamn. Det man behöver veta då är att querySelector endast kommer att innehålla ett enda element, även om det finns flera. Om man vill hitta flera element med en viss klass bör man istället använda querySelectorAll.  */
 
@@ -122,24 +109,60 @@ function onAddToCollection(name, gender, birth) {
   
   
     } else {
-      console.log("name does not exisct");
-      saveTask(name, gender, birth);
+      console.log("name does not exist");
+      let html = `<section id="submitWindow" class="flex-1 bg-white">
+                    <form id="commentForm"
+                          name="commentForm">
+                      <section class="mb-2">
+                        <label class="block pr-5 mb-2 text-xl"
+                              style="text-shadow:4px 4px 5px #606061"
+                              for="comment">Add comment or not for <u>${name}</u>, then click the submit button</label>
+                        <p class="message text-md text-rose-600 mb-2 hidden">
+                          Error message
+                        </p>
+                        <textarea maxlength="500"
+                                  rows="5"
+                                  id="comment"
+                                  name="comment"
+                                  class="resize-none w-full rounded-md border-violet-400 border-2 focus-within:outline-none focus:border-fuchsia-500 px-4 py-2"></textarea>
+                      </section>
+                      <button name="submitCommentForm"
+                              class="rounded-md bg-violet-300 border-2 border-violet-400 hovler:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500 px-4 py-1"
+                              type="submit">
+                        Submit
+                      </button>
+                    </form>
+                  </section>`
+      document.getElementById(`characterListItem${name}`).insertAdjacentHTML("afterend", html);
+      if(document.getElementById("submitWindow")){
+        commentForm.addEventListener('submit', (e) =>{
+          onSubmit(e, name, gender, birth, commentForm.comment.value);
+        });
+      }
     }
   });
 }
+
 function closeModalWindow(){
   let modal = document.getElementById('modalWindow')
   modal.remove()
 }
 
+function onSubmit(e, name, gender, birth, comment){
+  e.preventDefault();
+  saveTask(name, gender, birth, comment);
+  let submitWindow = document.getElementById('submitWindow');
+  submitWindow.remove();
+}
 /* Funktion för att ta hand om formulärets data och skicka det till api-klassen. */
-function saveTask(name, gender, birth) {
+function saveTask(name, gender, birth, comment) {
   /* Ett objekt vid namn task byggs ihop med hjälp av formulärets innehåll */
   /* Eftersom vi kan komma åt fältet via dess namn - todoForm - och alla formulärets fält med dess namn - t.ex. title - kan vi använda detta för att sätta värden hos ett objekt. Alla input-fält har sitt innehåll lagrat i en egenskap vid namn value (som också används i validateField-funktionen, men där har egenskapen value "destrukturerats" till en egen variabel. ) */
   const chara = { 
     name: name,
     gender: gender,
-    birth_year: birth
+    birth_year: birth,
+    comment: comment
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
 
@@ -192,6 +215,7 @@ function renderList() {
       });
       /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
       chars.forEach((char) => {
+        console.log(char);
         collectionListElement.insertAdjacentHTML('beforeend', renderTask(char));
 
         /* Om vi bryter ned nedanstående rad får vi något i stil med:
@@ -232,12 +256,14 @@ function renderTask(char) {
         </div>
       </div>`;
 
-    true &&
+    char.comment&&
 
     /* Det som ska göras om description finns är att html-variabeln ska byggas på med HTML-kod som visar det som finns i description-egenskapen hos task-objektet. */
     (html += `
-      <h3 class=" pl-4 mb-3 flex-1 text-sm font-bold text-slate-900 uppercase">Comment:</h3>
-      <p class="ml-8 mt-2 text-md italic">hej</p>
+      <h3 class=" pl-4 mb-3 flex-1 text-sm font-bold text-slate-900 capitalize">Comment:</h3>
+      <div style="word-break: break-word;">
+        <p class="ml-8 mt-2 text-md italic">${char.comment}</p>
+      </div>
   `);
 
   /* När html-strängen eventuellt har byggts på med HTML-kod för description-egenskapen läggs till sist en sträng motsvarande sluttaggen för <li>-elementet dit. */
