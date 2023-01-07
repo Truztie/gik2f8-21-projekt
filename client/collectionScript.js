@@ -97,23 +97,25 @@ Funktionen tar emot en parameter - field - som den får genom att e.target skick
 //   field.previousElementSibling.classList.remove('hidden');
 // }
 /* Callbackfunktion som används för eventlyssnare när någon klickar på knappen av typen submit */
-function onAddToCollection(character) {
-  console.log(character)
+function onAddToCollection(name, gender, birth) {
+  
+  console.log(name, gender, birth);
   /* Standardbeteendet hos ett formulär är att göra så att webbsidan laddas om när submit-eventet triggas. I denna applikation vill vi fortsätta att köra JavaScript-kod för att behandla formulärets innehåll och om webbsidan skulle ladda om i detta skede skulle det inte gå.   */
   /* Då kan man använda eventets metod preventDefault för att förhindra eventets standardbeteende, där submit-eventets standardbeteende är att ladda om webbsidan.  */
   /* Ytterligare en koll görs om alla fält är godkända, ifall man varken skrivit i eller lämnat något fält. */
     /* Log för att se om man kommit förbi valideringen */
     /* Anrop till funktion som har hand om att skicka uppgift till api:et */
-   saveTask(character);
+   saveTask(name, gender, birth);
 }
 
 /* Funktion för att ta hand om formulärets data och skicka det till api-klassen. */
-function saveTask(character) {
+function saveTask(name, gender, birth) {
   /* Ett objekt vid namn task byggs ihop med hjälp av formulärets innehåll */
   /* Eftersom vi kan komma åt fältet via dess namn - todoForm - och alla formulärets fält med dess namn - t.ex. title - kan vi använda detta för att sätta värden hos ett objekt. Alla input-fält har sitt innehåll lagrat i en egenskap vid namn value (som också används i validateField-funktionen, men där har egenskapen value "destrukturerats" till en egen variabel. ) */
-  const chara = {
-    name: character,
-    added: true
+  const chara = { 
+    name: name,
+    gender: gender,
+    birth_year: birth
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
 
@@ -127,6 +129,7 @@ function saveTask(character) {
   */
 
   api.create(chara).then((chara) => {
+
     /* Task kommer här vara innehållet i promiset. Om vi ska följa objektet hela vägen kommer vi behöva gå hela vägen till servern. Det är nämligen det som skickas med res.send i server/api.js, som api-klassens create-metod tar emot med then, översätter till JSON, översätter igen till ett JavaScript-objekt, och till sist returnerar som ett promise. Nu har äntligen det promiset fångats upp och dess innehåll - uppgiften från backend - finns tillgängligt och har fått namnet "chara".  */
     if (chara) {
       /* När en kontroll har gjorts om task ens finns - dvs. att det som kom tillbaka från servern faktiskt var ett objekt kan vi anropa renderList(), som ansvarar för att uppdatera vår todo-lista. renderList kommer alltså att köras först när vi vet att det gått bra att spara ner den nya uppgiften.  */
@@ -165,7 +168,7 @@ function renderList() {
       });
       /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
       chars.forEach((char) => {
-        collectionListElement.insertAdjacentHTML('beforeend', renderTask(char))
+        collectionListElement.insertAdjacentHTML('beforeend', renderTask(char));
 
         /* Om vi bryter ned nedanstående rad får vi något i stil med:
         1. todoListElement: ul där alla uppgifter ska finnas
@@ -185,7 +188,7 @@ function renderList() {
 Endast en uppgift åt gången kommer att skickas in här, eftersom den anropas inuti en forEach-loop, där uppgifterna loopas igenom i tur och ordning.  */
 
 /* Destructuring används för att endast plocka ut vissa egenskaper hos uppgifts-objektet. Det hade kunnat stå function renderTask(task) {...} här - för det är en hel task som skickas in - men då hade man behövt skriva task.id, task.title osv. på alla ställen där man ville använda dem. Ett trick är alltså att "bryta ut" dessa egenskaper direkt i funktionsdeklarationen istället. Så en hel task skickas in när funktionen anropas uppe i todoListElement.insertAdjacentHTML("beforeend", renderTask(task)), men endast vissa egenskaper ur det task-objektet tas emot här i funktionsdeklarationen. */
-function renderTask({ id, name}) {
+function renderTask(char) {
   /* Baserat på inskickade egenskaper hos task-objektet skapas HTML-kod med styling med hjälp av tailwind-klasser. Detta görs inuti en templatestring  (inom`` för att man ska kunna använda variabler inuti. Dessa skrivs inom ${}) */
   /*
   Det som skrivs inom `` är vanlig HTML, men det kan vara lite svårt att se att det är så. Om man enklare vill se hur denna kod fungerar kan man klistra in det i ett HTML-dokument, för då får man färgkodning och annat som kan underlätta. Om man gör det kommer dock ${...} inte innehålla texten i variabeln utan bara skrivas ut som det är. Men det är lättare att felsöka just HTML-koden på det sättet i alla fall.
@@ -195,13 +198,14 @@ function renderTask({ id, name}) {
   let html = `
     <li class="select-none mt-2 p-3 rounded-md border-2 border-violet-400 hover:border-fuchsia-500"
               style="box-shadow:2px 2px 8px #3b3b3b" >
-      <div class="flex items-center">
-        <div id="inputContainer${id}">
+      <div class="flex">
+        <div id="inputContainer${char.id}">
         </div>
-        <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${name}</h3>
+        <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${char.name}</h3>
+        <h3 class=" pl-4 mb-3 flex-1 text-md font-bold text-slate-900 uppercase">Gender: ${char.gender} <br> Birth Year: ${char.birth_year}</h3>
         <div>
        
-          <button onclick="deleteTask(${id})" class="inline-block bg-violet-300 text-md text-slate-900 border-2 border-violet-400 px-3 py-1 rounded-md ml-2 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500">Ta bort</button>
+          <button onclick="deleteTask(${char.id})" class="inline-block bg-violet-300 text-md text-slate-900 border-2 border-violet-400 px-3 py-1 rounded-md ml-2 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500">Ta bort</button>
         </div>
       </div>
     </li>`;
