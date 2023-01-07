@@ -1,1 +1,8 @@
-[{"id":6,"name":"Anakin Skywalker","added":true}]
+[
+    {"id":3,"name":"Owen Lars","gender":"male","birth_year":"52BBY"},
+    {"id":4,"name":"Leia Organa","gender":"female","birth_year":"19BBY"},
+    {"id":5,"name":"Luke Skywalker","gender":"male","birth_year":"19BBY"},
+    {"id":6,"name":"Shmi Skywalker","gender":"female","birth_year":"72BBY"},
+    {"id":7,"name":"Yarael Poof","gender":"male","birth_year":"unknown"},
+    {"id":8,"name":"Plo Koon","gender":"male","birth_year":"22BBY"}
+]
