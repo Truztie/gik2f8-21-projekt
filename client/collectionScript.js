@@ -12,7 +12,6 @@ Nedan används därför todoForm.[fältnamn] för att sätta eventlyssnare på r
 2. När någon lämnar fältet, dvs. klickar utanför det eller markerar nästa fält.
 För att fånga tangenttryck kan man exempelvis använda eventtypen "keyup" och för att fånga eventet att någon lämnar fältet använder man eventtypen "blur" */
 
-
 /* Här hämtas list-elementet upp ur HTML-koden. Alltså det element som vi ska skriva ut listelement innehållande varje enskild uppgift i. */
 const collectionListElement = document.getElementById('collectionList');
 /* Jag använder oftast getElementById, men andra sätt är att t.ex. använda querySelector och skicka in en css-selektor. I detta fall skulle man kunna skriva document.querySelector("#todoList"), eftersom # i css hittar specifika id:n. Ett annat sätt vore att använda elementet document.querySelector("ul"), men det är lite osäkert då det kan finnas flera ul-element på sidan. Det går också bra att hämta på klassnamn document.querySelector(".todoList") om det hade funnits ett element med sådan klass (det gör det inte). Klasser är inte unika så samma kan finnas hos flera olika element och om man vill hämta just flera element är det vanligt att söka efter dem via ett klassnamn. Det man behöver veta då är att querySelector endast kommer att innehålla ett enda element, även om det finns flera. Om man vill hitta flera element med en viss klass bör man istället använda querySelectorAll.  */
@@ -97,15 +96,40 @@ Funktionen tar emot en parameter - field - som den får genom att e.target skick
 //   field.previousElementSibling.classList.remove('hidden');
 // }
 /* Callbackfunktion som används för eventlyssnare när någon klickar på knappen av typen submit */
+
 function onAddToCollection(name, gender, birth) {
+  api.getAll().then((list) => {
+    let nameExists = false;
+
+    list.forEach((listItem) => {
+      if (name === listItem.name) {
+        nameExists = true;
+      }
+    });
+
+    if (nameExists) {
+      console.log("name already exists");
+      let html = `<div id="modalWindow" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 flex justify-center">
+                    <div class="rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-teal-400 to-violet-500 m-48 p-5 flex flex-col justify-center">
+                      <p class="font-bold">You are trying to add a characther that already exist in the collection.</p>
+                      <p class="font-bold flex justify-center">Click on "close" to close this window and try again.</p>
+                      <div class="flex justify-center m-3">
+                        <button id="closeButton" onclick="closeModalWindow()" class=" font-bold rounded-md border-2 border-slate-900 hover:border-fuchsia-500 px-5 py-1 bg-emerald-300" style="box-shadow:2px 2px 8px #2b2b2b">Close</button>
+                      </div>
+                    </div>
+                  </div>`
+      document.getElementById('root').insertAdjacentHTML("beforeend", html);
   
-  console.log(name, gender, birth);
-  /* Standardbeteendet hos ett formulär är att göra så att webbsidan laddas om när submit-eventet triggas. I denna applikation vill vi fortsätta att köra JavaScript-kod för att behandla formulärets innehåll och om webbsidan skulle ladda om i detta skede skulle det inte gå.   */
-  /* Då kan man använda eventets metod preventDefault för att förhindra eventets standardbeteende, där submit-eventets standardbeteende är att ladda om webbsidan.  */
-  /* Ytterligare en koll görs om alla fält är godkända, ifall man varken skrivit i eller lämnat något fält. */
-    /* Log för att se om man kommit förbi valideringen */
-    /* Anrop till funktion som har hand om att skicka uppgift till api:et */
-   saveTask(name, gender, birth);
+  
+    } else {
+      console.log("name does not exisct");
+      saveTask(name, gender, birth);
+    }
+  });
+}
+function closeModalWindow(){
+  let modal = document.getElementById('modalWindow')
+  modal.remove()
 }
 
 /* Funktion för att ta hand om formulärets data och skicka det till api-klassen. */
@@ -197,17 +221,27 @@ function renderTask(char) {
   När eventlyssnaren kopplas till knappen här nedanför, görs det däremot i HTML-kod och inte JavaScript. Man sätter ett HTML-attribut och refererar till eventlyssnarfunktionen istället. Då fungerar det annorlunda och parenteser är tillåtna. */
   let html = `
     <li class="select-none mt-2 p-3 rounded-md border-2 border-violet-400 hover:border-fuchsia-500"
-              style="box-shadow:2px 2px 8px #3b3b3b" >
-      <div class="flex">
-        <div id="inputContainer${char.id}">
-        </div>
-        <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${char.name}</h3>
-        <h3 class=" pl-4 mb-3 flex-1 text-md font-bold text-slate-900 uppercase">Gender: ${char.gender} <br> Birth Year: ${char.birth_year}</h3>
+              style="box-shadow:2px 2px 8px #1b1b1b" >
+      <div class="flex justify-between">
+        <div class>
+          <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${char.name}</h3>
+          <p class=" pl-4 mb-3 flex-1 text-sm font-bold text-slate-900 capitalize">Gender: ${char.gender} <br> Birth Year: ${char.birth_year}</p>
+        </div>  
         <div>
-       
-          <button onclick="deleteTask(${char.id})" class="inline-block bg-violet-300 text-md text-slate-900 border-2 border-violet-400 px-3 py-1 rounded-md ml-2 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500">Ta bort</button>
+          <button onclick="deleteTask(${char.id})" class=" inline-block bg-violet-300 text-md text-slate-900 border-2 border-violet-400 px-3 py-1 rounded-md ml-2 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500">Ta bort</button>
         </div>
-      </div>
+      </div>`;
+
+    true &&
+
+    /* Det som ska göras om description finns är att html-variabeln ska byggas på med HTML-kod som visar det som finns i description-egenskapen hos task-objektet. */
+    (html += `
+      <h3 class=" pl-4 mb-3 flex-1 text-sm font-bold text-slate-900 uppercase">Comment:</h3>
+      <p class="ml-8 mt-2 text-md italic">hej</p>
+  `);
+
+  /* När html-strängen eventuellt har byggts på med HTML-kod för description-egenskapen läggs till sist en sträng motsvarande sluttaggen för <li>-elementet dit. */
+  html +=`
     </li>`;
   /***********************Labb 2 ***********************/
   /* I ovanstående template-sträng skulle det vara lämpligt att sätta en checkbox, eller ett annat element som någon kan klicka på för att markera en uppgift som färdig. Det elementet bör, likt knappen för delete, också lyssna efter ett event (om du använder en checkbox, kolla på exempelvis w3schools vilket element som triggas hos en checkbox när dess värde förändras.). Skapa en eventlyssnare till det event du finner lämpligt. Funktionen behöver nog ta emot ett id, så den vet vilken uppgift som ska markeras som färdig. Det skulle kunna vara ett checkbox-element som har attributet on[event]="updateTask(id)". */
