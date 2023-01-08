@@ -21,31 +21,6 @@ function renderCharacterList(characterList) {
   const searchSection = document.getElementById('searchSection'); //redundant?
   existingElement && searchSection.removeChild(existingElement);
   characterList.length > 0 && searchField.value && searchSection.insertAdjacentHTML('beforeend', CharacterList(characterList));
-
-// const listElement = document.querySelectorAll('.character-list__item');
-// listElement.forEach((item) =>{
-
-//   item.addEventListener("mouseover", (e) => {
-
-//     getBookDetail(e.target.id).then((character) => (item.insertAdjacentHTML("beforeend", CharacterDetail(character, e.pageX, e.pageY))));
-
-//     item.addEventListener("mousemove", (e) => {
-//       const existingPopup = document.getElementById("CharacterDetail");
-//       if(existingPopup){
-//       existingPopup.style.left = e.pageX+10 + 'px';
-//       existingPopup.style.top = e.pageY+10 + 'px';
-//       }
-        
-//     })
-
-//     item.addEventListener("mouseout", (e) =>{
-//       const existingPopup = document.getElementById("CharacterDetail");
-//       if(existingPopup){
-//         existingPopup.remove();
-//       }
-//     })
-//   })
-// })
 }
 
 /*Du kan ju ta en hel del inspiration från hur ul listan renderas

@@ -110,34 +110,39 @@ function onAddToCollection(name, gender, birth) {
   
     } else {
       console.log("name does not exist");
-      let html = `<section id="submitWindow" class="flex-1 bg-white">
-                    <form id="commentForm"
-                          name="commentForm">
-                      <section class="mb-2">
-                        <label class="block pr-5 mb-2 text-xl"
-                              style="text-shadow:4px 4px 5px #606061"
-                              for="comment">Add comment or not for <u>${name}</u>, then click the submit button</label>
-                        <p class="message text-md text-rose-600 mb-2 hidden">
-                          Error message
-                        </p>
-                        <textarea maxlength="500"
-                                  rows="5"
-                                  id="comment"
-                                  name="comment"
-                                  class="resize-none w-full rounded-md border-violet-400 border-2 focus-within:outline-none focus:border-fuchsia-500 px-4 py-2"></textarea>
-                      </section>
-                      <button name="submitCommentForm"
-                              class="rounded-md bg-violet-300 border-2 border-violet-400 hovler:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500 px-4 py-1"
-                              type="submit">
-                        Submit
-                      </button>
-                    </form>
-                  </section>`
+      let html = `<div id="modalWindow" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 flex justify-center">
+                    <section id="submitWindow" class="flex-1 rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-teal-400 to-violet-500 m-48 p-5">
+                      <form id="commentForm"
+                            name="commentForm">
+                        <section class="mb-2">
+                          <label class="block pr-5 mb-2 text-xl"
+                                style="text-shadow:4px 4px 5px #606061 word-break: break-word;"
+                                for="comment">Add comment or not for <u>${name}</u>, then click the submit button</label>
+                          <p class="message text-md text-rose-600 mb-2 hidden">
+                            Error message
+                          </p>
+                          <textarea maxlength="500"
+                                    rows="5"
+                                    id="comment"
+                                    name="comment"
+                                    class="resize-none w-full rounded-md border-violet-400 border-2 focus-within:outline-none focus:border-fuchsia-500 px-4 py-2"></textarea>
+                        </section>
+                        <button name="submitCommentForm" type="submit"
+                                class="rounded-md bg-violet-300 border-2 border-violet-400 hovler:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500 px-4 py-1">
+                          Submit
+                        </button>
+                      </form>
+                    </section>
+                  </div>`
       document.getElementById(`characterListItem${name}`).insertAdjacentHTML("afterend", html);
       if(document.getElementById("submitWindow")){
         commentForm.addEventListener('submit', (e) =>{
           onSubmit(e, name, gender, birth, commentForm.comment.value);
+          if(onSubmit){
+            closeModalWindow();
+          }
         });
+        
       }
     }
   });
@@ -215,7 +220,6 @@ function renderList() {
       });
       /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
       chars.forEach((char) => {
-        console.log(char);
         collectionListElement.insertAdjacentHTML('beforeend', renderTask(char));
 
         /* Om vi bryter ned nedanstående rad får vi något i stil med:
