@@ -46,5 +46,8 @@ searchField.addEventListener('keyup', (e) =>
 );
 // denna funktion tar in characterList och ko
 function renderCharacterList(characterList) {
+  const existingElement = document.querySelector('.character-list');
+  const searchSection = document.getElementById('searchSection');
+  existingElement && searchSection.removeChild(existingElement);
   characterList.length > 0 && searchField.value && searchSection.insertAdjacentHTML('beforeend', CharacterList(characterList));
 }
