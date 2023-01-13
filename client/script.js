@@ -1,8 +1,10 @@
 'use strict';
+// initierar en karaktärarray
 let characterList = []
 
+//när fönstret öppnas så lyssnar den på "load" och därefter skapar en popup som visar att information som hämtas från API:t håller på att hämstas.
 window.addEventListener('load', () => {
-  // Show the loading screen
+  // Denna html är "loadingscreen" aka modalwindow, för hämnting av resurser.
   let html = `<div id="loadingScreen" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 flex justify-center">
                 <section id="loadingScreen" class="rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-blue-700 via-slate-900 to-red-700 m-48 p-5 flex">
                   <p class="font-bold text-slate-200 mr-10"
@@ -12,11 +14,14 @@ window.addEventListener('load', () => {
               </div>`
   document.getElementById('root').insertAdjacentHTML("beforebegin", html);
 
+   // anropar getAll för att hämta alla karaktärer 
    getAll().then((result) => {
      characterList = result;
-      //Hide the loading screen
+      //när alla karaktärer har hämtats så försvinner "loadingscreen" aka modalwindow
      let loadingScreen = document.getElementById('loadingScreen');
      loadingScreen.remove();
+
+     //om resurserna inte går att hämta för tillfället kommer istället detta modalfönster upp och talar om att man får försöka igen.
    }).catch((error) => {
      console.log(error)
      let htmlError = `<div id="loadingScreen" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 flex justify-center">
@@ -28,6 +33,7 @@ window.addEventListener('load', () => {
    });
 });
 
+// sökfältet lussnar efter keyup och när man skriver så kommer sökttermen som man skriver matcha de object som ligger i characterList och då visa de karaktärer med den följden av bokstäver.
 searchField.addEventListener('keyup', (e) =>
   renderCharacterList(
     characterList.filter(({name}) => {
@@ -38,15 +44,7 @@ searchField.addEventListener('keyup', (e) =>
     })
   )
 );
-
+// denna funktion tar in characterList och ko
 function renderCharacterList(characterList) {
-  const existingElement = document.querySelector('.character-list');
-  const searchSection = document.getElementById('searchSection'); //redundant?
-  existingElement && searchSection.removeChild(existingElement);
   characterList.length > 0 && searchField.value && searchSection.insertAdjacentHTML('beforeend', CharacterList(characterList));
 }
-
-/*Du kan ju ta en hel del inspiration från hur ul listan renderas
-Börja med att försöka få fram en div nånstans när du kör mouse over på nåt i listan
-Tips : skapa en lista med hjälp av queryselector all som du sedan gör en for each loop på för att fästa eventlistener
-Tips2, plocka ut eventet ur de du hovrar över och se vad som erbjuds*/

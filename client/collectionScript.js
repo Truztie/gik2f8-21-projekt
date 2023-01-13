@@ -128,7 +128,7 @@ function onAddToCollection(name, gender, birth) {
                                     class="resize-none font-bold w-full rounded-md border-slate-900 border-2 focus-within:outline-none focus:border-blue-700 px-4 py-2"></textarea>
                         </section>
                         <button name="submitCommentForm" type="submit"
-                                class="rounded-md font-bold bg-amber-100 border-2 border-slate-900 px-4 py-1">
+                                class="rounded-md font-bold bg-amber-100 border-2 border-slate-900 hover:border-blue-700 px-4 py-1">
                           Submit
                         </button>
                       </form>
