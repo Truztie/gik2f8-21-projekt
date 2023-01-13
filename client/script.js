@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
    });
 });
 
-// sökfältet lussnar efter keyup och när man skriver så kommer sökttermen som man skriver matcha de object som ligger i characterList och då visa de karaktärer med den följden av bokstäver.
+// sökfältet lyssnar efter keyup och när man skriver så kommer sökttermen som man skriver matcha de object som ligger i characterList och då visa de karaktärer med den följden av bokstäver.
 searchField.addEventListener('keyup', (e) =>
   renderCharacterList(
     characterList.filter(({name}) => {
