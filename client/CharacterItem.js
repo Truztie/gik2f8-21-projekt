@@ -1,3 +1,4 @@
+// Denna funktion CharacterItem tar in en specific characterItem och skapar ett listelement LI i html. denna listelementet har också en knapp för att kunna addera karaktären till vårat backend api "collection.json"
 const CharacterItem = (character) => {
     let html = `<li id="characterListItem${character.name}"
                 class="character-List__item flex justify-between last:mb-0 p-3 font-bold text-slate-900 last:border-b-0 border-b border-slate-900 cursor-pointer">

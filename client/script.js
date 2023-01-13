@@ -44,7 +44,7 @@ searchField.addEventListener('keyup', (e) =>
     })
   )
 );
-// denna funktion tar in characterList och ko
+// denna funktion tar in characterList och renderar den när vi börjar söka. och när vi tar bort söksträngen så försvinenr listan igen.
 function renderCharacterList(characterList) {
   const existingElement = document.querySelector('.character-list');
   const searchSection = document.getElementById('searchSection');
