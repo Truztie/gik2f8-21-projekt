@@ -4,8 +4,9 @@ let characterList = []
 window.addEventListener('load', () => {
   // Show the loading screen
   let html = `<div id="loadingScreen" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 flex justify-center">
-                <section id="loadingScreen" class="rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-teal-400 to-violet-500 m-48 p-5 flex">
-                  <p class="font-bold mr-10">Resources are loading.<br> Please wait until it has been loading. <br> This windows will dissapear when the resources has finishing loading.</p>
+                <section id="loadingScreen" class="rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-blue-700 via-slate-900 to-red-700 m-48 p-5 flex">
+                  <p class="font-bold text-slate-200 mr-10"
+                     style="text-shadow:4px 4px 5px #000000">Resources are loading.<br> Please wait until it has been loading. <br> This windows will dissapear when the resources has finishing loading.</p>
                   <img src="loading.gif" alt="A description of the image" width="100" height="100">
                 </section>
               </div>`

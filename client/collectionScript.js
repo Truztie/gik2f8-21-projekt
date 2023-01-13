@@ -97,11 +97,11 @@ function onAddToCollection(name, gender, birth) {
     if (nameExists) {
       console.log("name already exists");
       let html = `<div id="modalWindow" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 flex justify-center">
-                    <div class="rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-teal-400 to-violet-500 m-48 p-5 flex flex-col justify-center">
+                    <div class="rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-amber-100 to-rose-600 m-48 p-5 flex flex-col justify-center">
                       <p class="font-bold">You are trying to add a characther that already exist in the collection.</p>
                       <p class="font-bold flex justify-center">Click on "close" to close this window and try again.</p>
                       <div class="flex justify-center m-3">
-                        <button id="closeButton" onclick="closeModalWindow()" class=" font-bold rounded-md border-2 border-slate-900 hover:border-fuchsia-500 px-5 py-1 bg-emerald-300" style="box-shadow:2px 2px 8px #2b2b2b">Close</button>
+                        <button id="closeButton" onclick="closeModalWindow()" class=" font-bold rounded-md border-2 border-slate-900 hover:border-red-700 px-5 py-1 bg-amber-100" style="box-shadow:2px 2px 8px #2b2b2b">Close</button>
                       </div>
                     </div>
                   </div>`
@@ -111,13 +111,13 @@ function onAddToCollection(name, gender, birth) {
     } else {
       console.log("name does not exist");
       let html = `<div id="modalWindow" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-black/50 flex justify-center">
-                    <section id="submitWindow" class="flex-1 rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-teal-400 to-violet-500 m-48 p-5">
+                    <section id="submitWindow" class="flex-1 rounded-md border-2 border-slate-900 absolute bg-gradient-to-tr from-amber-100 to-blue-700 m-48 p-5">
                       <form id="commentForm"
                             name="commentForm">
                         <section class="mb-2">
-                          <label class="block pr-5 mb-2 text-xl"
+                          <label class="block pr-5 mb-2 text-xl font-bold"
                                 style="text-shadow:4px 4px 5px #606061 word-break: break-word;"
-                                for="comment">Add comment or not for <u>${name}</u>, then click the submit button</label>
+                                for="comment">Add comment or not for <u>${name}</u>, then click the submit button.</label>
                           <p class="message text-md text-rose-600 mb-2 hidden">
                             Error message
                           </p>
@@ -125,10 +125,10 @@ function onAddToCollection(name, gender, birth) {
                                     rows="5"
                                     id="comment"
                                     name="comment"
-                                    class="resize-none w-full rounded-md border-violet-400 border-2 focus-within:outline-none focus:border-fuchsia-500 px-4 py-2"></textarea>
+                                    class="resize-none font-bold w-full rounded-md border-slate-900 border-2 focus-within:outline-none focus:border-blue-700 px-4 py-2"></textarea>
                         </section>
                         <button name="submitCommentForm" type="submit"
-                                class="rounded-md bg-violet-300 border-2 border-violet-400 hovler:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500 px-4 py-1">
+                                class="rounded-md font-bold bg-amber-100 border-2 border-slate-900 px-4 py-1">
                           Submit
                         </button>
                       </form>
@@ -248,15 +248,15 @@ function renderTask(char) {
   /* Lite kort om vad HTML-koden innehåller. Det mesta är bara struktur och Tailwind-styling enligt eget tycke och smak. Värd att nämna extra är dock knappen, <button>-elementet, en bit ned. Där finns ett onclick-attribut som kopplar en eventlyssnare till klickeventet. Eventlyssnaren här heter onDelete och den får med sig egenskapen id, som vi fått med oss från task-objektet. Notera här att det går bra att sätta parenteser och skicka in id på detta viset här, men man fick inte sätta parenteser på eventlyssnare när de kopplades med addEventListener (som för formulärfälten högre upp i koden). En stor del av föreläsning 3 rörande funktioner och event förklarar varför man inte får sätta parenteser på callbackfunktioner i JavaScriptkod.
   När eventlyssnaren kopplas till knappen här nedanför, görs det däremot i HTML-kod och inte JavaScript. Man sätter ett HTML-attribut och refererar till eventlyssnarfunktionen istället. Då fungerar det annorlunda och parenteser är tillåtna. */
   let html = `
-    <li class="select-none mt-2 p-3 rounded-md border-2 border-violet-400 hover:border-fuchsia-500"
+    <li class="select-none mt-2 p-3 rounded-md border-2 border-amber-600 hover:border-amber-300"
               style="box-shadow:2px 2px 8px #1b1b1b" >
       <div class="flex justify-between">
         <div class>
-          <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-slate-900 uppercase">${char.name}</h3>
-          <p class=" pl-4 mb-3 flex-1 text-sm font-bold text-slate-900 capitalize">Gender: ${char.gender} <br> Birth Year: ${char.birth_year}</p>
+          <h3 class=" pl-4 mb-3 flex-1 text-xl font-bold text-amber-100 uppercase">${char.name}</h3>
+          <p class=" pl-4 mb-3 flex-1 text-sm font-bold text-amber-100 capitalize">Gender: ${char.gender} <br> Birth Year: ${char.birth_year}</p>
         </div>  
         <div>
-          <button onclick="deleteTask(${char.id})" class=" inline-block bg-violet-300 text-md text-slate-900 border-2 border-violet-400 px-3 py-1 rounded-md ml-2 hover:bg-gradient-to-br from-teal-400 via-violet-500 to-fuchsia-500">Ta bort</button>
+          <button onclick="deleteTask(${char.id})" class=" inline-block bg-amber-100 text-md font-bold text-slate-900 border-2 border-amber-600 px-3 py-1 rounded-md ml-2 hover:bg-orange-400 hover:border-amber-300">Delete</button>
         </div>
       </div>`;
 
@@ -264,9 +264,9 @@ function renderTask(char) {
 
     /* Det som ska göras om description finns är att html-variabeln ska byggas på med HTML-kod som visar det som finns i description-egenskapen hos task-objektet. */
     (html += `
-      <h3 class=" pl-4 mb-3 flex-1 text-sm font-bold text-slate-900 capitalize">Comment:</h3>
+      <h3 class=" pl-4 mb-3 flex-1 text-sm font-bold text-amber-100 capitalize">Comment:</h3>
       <div style="word-break: break-word;">
-        <p class="ml-8 mt-2 text-md italic">${char.comment}</p>
+        <p class="ml-8 mt-2 text-md italic text-amber-100">${char.comment}</p>
       </div>
   `);
 
